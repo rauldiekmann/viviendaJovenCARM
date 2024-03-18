@@ -56,7 +56,7 @@ import { Link, useNavigate } from 'react-router-dom'
           className='border p-3 rounded-lg' id='username' onChange={handleChange}/>
           <input type="text" placeholder='Correo'
           className='border p-3 rounded-lg' id='email' onChange={handleChange}/>
-          <input type="text" placeholder='Contraseña'
+          <input type="password" placeholder='Contraseña'
           className='border p-3 rounded-lg' id='password' onChange={handleChange} />
           <button  disabled = {loading} className='bg-slate-700 text-white p-3 
           rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
