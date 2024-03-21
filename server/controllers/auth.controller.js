@@ -66,3 +66,12 @@ export const google = async (req, res, next) => {
       next(error);
     }
 };
+
+export const signout = async (req, res) => {
+  try {
+    res.clearCookie("access_token");
+    res.status(200).json("Has cerrado sesión");
+  } catch (error) {
+    next(error);
+  }
+};

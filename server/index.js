@@ -3,6 +3,8 @@ import mongoose, { mongo } from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './routes/user.routes.js';
 import authRouter from './routes/auth.routes.js';
+import cookieParser from 'cookie-parser';
+
 dotenv.config();
 
 mongoose.connect(process.env.MONGO).then(() => {
@@ -14,9 +16,11 @@ const app = express();
 
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/server/user', userRouter);
 app.use('/server/auth', authRouter);
+app.use('/server/listing', listingRouter);
 
 
 //Middleware para errores
