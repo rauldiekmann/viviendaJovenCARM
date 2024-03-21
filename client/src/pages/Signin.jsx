@@ -13,6 +13,7 @@ import OAuth from '../components/OAuth';
   const [loading, setLoading] = useState(false);*/
  const {loading, error} = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //Manejar cambios en el formulario
   const handleChange = (e) => {
@@ -24,7 +25,7 @@ import OAuth from '../components/OAuth';
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      dispatch(signInStart());
       const res = await fetch('server/auth/signin',
       {
         method: 'POST',
