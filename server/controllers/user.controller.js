@@ -68,7 +68,7 @@ export const deleteUser = async (req, res, next) => {
     try {
       const user = await User.findById(req.params.id);
     
-      if (!user) return next(errorHandler(404, 'User not found!'));
+      if (!user) return next(errorHandler(404, 'Usuario no encontrado'));
     
       const { password: pass, ...rest } = user._doc;
     
