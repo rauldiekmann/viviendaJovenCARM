@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { MdEmail } from "react-icons/md";
+import { FaPhoneAlt } from "react-icons/fa";
+
 
 export default function Contact({ listing }) {
   const [landlord, setLandlord] = useState(null);
@@ -14,6 +17,7 @@ export default function Contact({ listing }) {
         const res = await fetch(`/server/user/${listing.userRef}`);
         const data = await res.json();
         setLandlord(data);
+        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -24,27 +28,26 @@ export default function Contact({ listing }) {
     <div>
       {landlord && (
         <div className='flex flex-col gap-2'>
-          <p>
-            Contacto <span className='font-semibold'>{landlord.username}</span>{' '}
-            de{' '}
+          <p className='text-3xl'>
+            Contacta a <span className='font-semibold'>{landlord.username}</span>{' '}
+            sobre{' '}
             <span className='font-semibold'>{listing.name.toLowerCase()}</span>
+            :
           </p>
-          <textarea
-            name='message'
-            id='message'
-            rows='2'
-            value={message}
-            onChange={onChange}
-            placeholder='Enter your message here...'
-            className='w-full border p-3 rounded-lg'
-          ></textarea>
-
-          <Link
-          to={`mailto:${landlord.email}?subject=Regarding ${listing.name}&body=${message}`}
-          className='bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:opacity-95'
-          >
-            Enviar mensaje          
-          </Link>
+          <div className='flex flex-row gap-2'>
+            <MdEmail className='text-4xl text-rose-800 mt-1' />
+            <p className='text-4xl font-bold text-rose-800'>
+              {landlord.email}
+            </p>
+          </div>
+          {landlord.phone && (
+            <div className='flex flex-row gap-2'>
+            <FaPhoneAlt className='text-4xl text-rose-800 mt-1' />
+            <p className='text-4xl font-bold text-rose-800'>
+              {landlord.phone}
+            </p>
+          </div>
+          )}
         </div>
       )}
     </div>

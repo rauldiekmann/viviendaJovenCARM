@@ -4,9 +4,9 @@ import {errorHandler} from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
 export const signup = async (req, res, next) => {
-    const {username, email, password} = req.body;
+    const {username, email, password, phone, type} = req.body;
     const hashedPassword = await bcryptjs.hash(password, 12);
-    const newUser = new User({username, email, password: hashedPassword});
+    const newUser = new User({username, email, password: hashedPassword, phone, type});
     try {
         await newUser.save();
         res.status(201).json("Registrado con éxito");

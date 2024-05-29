@@ -22,9 +22,8 @@ export default function UpdateListing() {
     type: 'rent',
     bedrooms: 1,
     bathrooms: 1,
-    regularPrice: 50,
-    discountPrice: 0,
-    offer: false,
+    price:0,
+    municipality: '',
     parking: false,
     furnished: false,
   });
@@ -123,6 +122,13 @@ export default function UpdateListing() {
       });
     }
 
+    if(e.target.id === 'municipality'){
+      setFormData({
+        ...formData,
+        municipality: e.target.value,
+      });
+    }
+
     if (
       e.target.id === 'parking' ||
       e.target.id === 'furnished' ||
@@ -203,6 +209,58 @@ export default function UpdateListing() {
             onChange={handleChange}
             value={formData.description}
           />
+          <select 
+          id="municipality" 
+          onChange={handleChange}
+          value={formData.municipality}       
+          className='border rounded-lg p-3 w-full'
+>
+        <option value="abanilla">Abanilla</option>
+        <option value="abaran">Abarán</option>
+        <option value="aguilas">Aguilas</option>
+        <option value="albudeite">Albudeite</option>
+        <option value="alcantarilla">Alcantarilla</option>
+        <option value="aledo">Aledo</option>
+        <option value="alguazas">Alguazas</option>
+        <option value="alhama_de_murcia">Alhama de Murcia</option>
+        <option value="archena">Archena</option>
+        <option value="beniel">Beniel</option>
+        <option value="blanca">Blanca</option>
+        <option value="bullas">Bullas</option>
+        <option value="calasparra">Calasparra</option>
+        <option value="campos_del_rio">Campos del Río</option>
+        <option value="caravaca_de_la_cruz">Caravaca de la Cruz</option>
+        <option value="cartagena">Cartagena</option>
+        <option value="cehegin">Cehegín</option>
+        <option value="ceuti">Ceutí</option>
+        <option value="cieza">Cieza</option>
+        <option value="fortuna">Fortuna</option>
+        <option value="fuente_alamo">Fuente Álamo</option>
+        <option value="jumilla">Jumilla</option>
+        <option value="la_union">La Unión</option>
+        <option value="las_torres_de_cotillas">Las Torres de Cotillas</option>
+        <option value="librilla">Librilla</option>
+        <option value="lorca">Lorca</option>
+        <option value="lorqui">Lorquí</option>
+        <option value="los_alcazares">Los Alcázares</option>
+        <option value="mazarron">Mazarrón</option>
+        <option value="molina_de_segura">Molina de Segura</option>
+        <option value="moratalla">Moratalla</option>
+        <option value="mula">Mula</option>
+        <option value="murcia">Murcia</option>
+        <option value="ojos">Ojós</option>
+        <option value="pliego">Pliego</option>
+        <option value="puerto_lumbreras">Puerto Lumbreras</option>
+        <option value="ricote">Ricote</option>
+        <option value="san_javier">San Javier</option>
+        <option value="san_pedro_del_pinatar">San Pedro del Pinatar</option>
+        <option value="santomera">Santomera</option>
+        <option value="torre_pacheco">Torre Pacheco</option>
+        <option value="totana">Totana</option>
+        <option value="ulea">Ulea</option>
+        <option value="villanueva_del_rio_segura">Villanueva del Río Segura</option>
+        <option value="yecla">Yecla</option>
+    </select>
           <input
             type='text'
             placeholder='Direción'

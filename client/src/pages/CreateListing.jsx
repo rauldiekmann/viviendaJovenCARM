@@ -17,13 +17,12 @@ export default function CreateListing() {
     imageUrls: [],
     name: '',
     description: '',
+    municipality: '',
     address: '',
     type: 'rent',
     bedrooms: 1,
     bathrooms: 1,
-    regularPrice: 50,
-    discountPrice: 0,
-    offer: false,
+    price: 50,
     parking: false,
     furnished: false,
   });
@@ -57,11 +56,11 @@ export default function CreateListing() {
           setUploading(false);
         })
         .catch((err) => {
-          setImageUploadError('Image upload failed (2 mb max per image)');
+          setImageUploadError('Error al subir las imágenes, límite de 2mb por imagen');
           setUploading(false);
         });
     } else {
-      setImageUploadError('You can only upload 6 images per listing');
+      setImageUploadError('Solo puedes subir 6 imágenes como máximo');
       setUploading(false);
     }
   };
@@ -106,10 +105,16 @@ export default function CreateListing() {
       });
     }
 
+    if(e.target.id === 'municipality'){
+      setFormData({
+        ...formData,
+        municipality: e.target.value,
+      });
+    }
+
     if (
       e.target.id === 'parking' ||
-      e.target.id === 'furnished' ||
-      e.target.id === 'offer'
+      e.target.id === 'furnished'
     ) {
       setFormData({
         ...formData,
@@ -134,8 +139,10 @@ export default function CreateListing() {
     try {
       if (formData.imageUrls.length < 1)
         return setError('Debes subir al menos una imagen');
-      if (+formData.regularPrice < +formData.discountPrice)
-        return setError('El precio con descuento debe ser menor que el precio normal');
+      if (formData.price > 600 && formData.type === 'rent')
+        return setError('El precio máximo para alquiler es de 600€');
+      if (formData.price > 175000 && formData.type === 'sale')
+        return setError('El precio máximo para venta es de 175000€');
       setLoading(true);
       setError(false);
       const res = await fetch('/server/listing/create', {
@@ -164,7 +171,13 @@ export default function CreateListing() {
       <h1 className='text-3xl font-semibold text-center my-7'>
         Crear anuncio
       </h1>
-      <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-4'>
+      <p> <span><strong>No te preocupes por el descuento, o la cantidad del aval</strong></span>, especifica tu precio y
+        nosotros lo calcularemos por ti.
+      </p>
+      <p className='mt-2'>
+        Los precios límite para que tu inmueble sea válido para las ayudas de la CARM son: <span><strong>600€ para alquiler y 175000€ para venta</strong></span>.
+      </p>
+      <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-4 pt-4'>
         <div className='flex flex-col gap-4 flex-1'>
           <input
             type='text'
@@ -186,9 +199,62 @@ export default function CreateListing() {
             onChange={handleChange}
             value={formData.description}
           />
+          <select 
+          id="municipality" 
+          onChange={handleChange}
+          value={formData.municipality}       
+          className='border rounded-lg p-3 w-full'
+>
+        <option value="abanilla">Abanilla</option>
+        <option value="abaran">Abarán</option>
+        <option value="aguilas">Aguilas</option>
+        <option value="albudeite">Albudeite</option>
+        <option value="alcantarilla">Alcantarilla</option>
+        <option value="aledo">Aledo</option>
+        <option value="alguazas">Alguazas</option>
+        <option value="alhama_de_murcia">Alhama de Murcia</option>
+        <option value="archena">Archena</option>
+        <option value="beniel">Beniel</option>
+        <option value="blanca">Blanca</option>
+        <option value="bullas">Bullas</option>
+        <option value="calasparra">Calasparra</option>
+        <option value="campos_del_rio">Campos del Río</option>
+        <option value="caravaca_de_la_cruz">Caravaca de la Cruz</option>
+        <option value="cartagena">Cartagena</option>
+        <option value="cehegin">Cehegín</option>
+        <option value="ceuti">Ceutí</option>
+        <option value="cieza">Cieza</option>
+        <option value="fortuna">Fortuna</option>
+        <option value="fuente_alamo">Fuente Álamo</option>
+        <option value="jumilla">Jumilla</option>
+        <option value="la_union">La Unión</option>
+        <option value="las_torres_de_cotillas">Las Torres de Cotillas</option>
+        <option value="librilla">Librilla</option>
+        <option value="lorca">Lorca</option>
+        <option value="lorqui">Lorquí</option>
+        <option value="los_alcazares">Los Alcázares</option>
+        <option value="mazarron">Mazarrón</option>
+        <option value="molina_de_segura">Molina de Segura</option>
+        <option value="moratalla">Moratalla</option>
+        <option value="mula">Mula</option>
+        <option value="murcia">Murcia</option>
+        <option value="ojos">Ojós</option>
+        <option value="pliego">Pliego</option>
+        <option value="puerto_lumbreras">Puerto Lumbreras</option>
+        <option value="ricote">Ricote</option>
+        <option value="san_javier">San Javier</option>
+        <option value="san_pedro_del_pinatar">San Pedro del Pinatar</option>
+        <option value="santomera">Santomera</option>
+        <option value="torre_pacheco">Torre Pacheco</option>
+        <option value="totana">Totana</option>
+        <option value="ulea">Ulea</option>
+        <option value="villanueva_del_rio_segura">Villanueva del Río Segura</option>
+        <option value="yecla">Yecla</option>
+    </select>
+
           <input
             type='text'
-            placeholder='Direción'
+            placeholder='Dirección'
             className='border p-3 rounded-lg'
             id='address'
             required
@@ -236,16 +302,6 @@ export default function CreateListing() {
               />
               <span>Amueblado</span>
             </div>
-            <div className='flex gap-2'>
-              <input
-                type='checkbox'
-                id='offer'
-                className='w-5'
-                onChange={handleChange}
-                checked={formData.offer}
-              />
-              <span>En oferta</span>
-            </div>
           </div>
           <div className='flex flex-wrap gap-6'>
             <div className='flex items-center gap-2'>
@@ -277,49 +333,28 @@ export default function CreateListing() {
             <div className='flex items-center gap-2'>
               <input
                 type='number'
-                id='regularPrice'
+                id='price'
                 min='50'
-                max='150000'
+                
                 required
                 className='p-3 border border-gray-300 rounded-lg'
                 onChange={handleChange}
-                value={formData.regularPrice}
+                value={formData.price}
               />
               <div className='flex flex-col items-center'>
-                <p>Precio normal</p>
+                <p>Precio original</p>
                 {formData.type === 'rent' && (
                   <span className='text-xs'>(€ / mes)</span>
                 )}
               </div>
             </div>
-            {formData.offer && (
-              <div className='flex items-center gap-2'>
-                <input
-                  type='number'
-                  id='discountPrice'
-                  min='0'
-                  max='10000000'
-                  required
-                  className='p-3 border border-gray-300 rounded-lg'
-                  onChange={handleChange}
-                  value={formData.discountPrice}
-                />
-                <div className='flex flex-col items-center'>
-                  <p>Precio con descuento</p>
-
-                  {formData.type === 'rent' && (
-                    <span className='text-xs'>(€ / mes)</span>
-                  )}
-                </div>
-              </div>
-            )}
           </div>
         </div>
         <div className='flex flex-col flex-1 gap-4'>
           <p className='font-semibold'>
             Imagenes: 
             <span className='font-normal text-gray-600 ml-4'>
-              La primera imagen será la portada (max 6)
+              La primera imagen será la portada (máximo 6 imágenes)
             </span>
           </p>
           <div className='flex gap-4'>

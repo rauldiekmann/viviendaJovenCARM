@@ -10,19 +10,24 @@ export default function Home() {
   const [offerListings, setOfferListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
+  const [saleCount, setSaleCount] = useState(0);
+  const [rentCount, setRentCount] = useState(0);
   SwiperCore.use([Navigation]);
   console.log(offerListings);
+  
   useEffect(() => {
-    const fetchOfferListings = async () => {
+    
+    const fetchListingCount = async () => {
       try {
-        const res = await fetch('/server/listing/get?offer=true&limit=4');
+        const res = await fetch('/server/listing/count');
         const data = await res.json();
-        setOfferListings(data);
-        fetchRentListings();
+        setSaleCount(data.saleCount);
+        setRentCount(data.rentCount);
       } catch (error) {
         console.log(error);
       }
     };
+
     const fetchRentListings = async () => {
       try {
         const res = await fetch('/server/listing/get?type=rent&limit=4');
@@ -39,74 +44,42 @@ export default function Home() {
         const res = await fetch('/server/listing/get?type=sale&limit=4');
         const data = await res.json();
         setSaleListings(data);
+        fetchListingCount();
       } catch (error) {
         log(error);
       }
     };
-    fetchOfferListings();
+    fetchRentListings();
   }, []);
   return (
     <div>
       {/* top */}
-      <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto'>
+      <div className='flex flex-col gap-6 pt-16 px-3 max-w-6xl mx-auto'>
         <h1 className='text-slate-700 font-bold text-3xl lg:text-6xl'>
-          Find your next <span className='text-slate-500'>perfect</span>
+          Si eres joven, aquí encontrarás tu hogar <span className='text-slate-500'>perfecto,</span>
           <br />
-          place with ease
+          alquiles o compres
         </h1>
         <div className='text-gray-400 text-xs sm:text-sm'>
-          Sahand Estate is the best place to find your next perfect place to
-          live.
+          Descubre tus mejores oportunidades de alquiler y compra de viviendas en la Región de Murcia,
           <br />
-          We have a wide range of properties for you to choose from.
+          con la ayuda de la Comunidad Autónoma.
         </div>
         <Link
           to={'/search'}
-          className='text-xs sm:text-sm text-blue-800 font-bold hover:underline'
+          className=' sm:text-sm md:text-3xl text-rose-800 font-bold hover:text-4xl transition-all duration-1200 '
         >
-          Let's get started...
+          Llévame a ver inmuebles
         </Link>
       </div>
 
-      {/* swiper */}
-      <Swiper navigation>
-        {offerListings &&
-          offerListings.length > 0 &&
-          offerListings.map((listing) => (
-            <SwiperSlide>
-              <div
-                style={{
-                  background: `url(${listing.imageUrls[0]}) center no-repeat`,
-                  backgroundSize: 'cover',
-                }}
-                className='h-[500px]'
-                key={listing._id}
-              ></div>
-            </SwiperSlide>
-          ))}
-      </Swiper>
-
-      {/* listing results for offer, sale and rent */}
-
       <div className='max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10'>
-        {offerListings && offerListings.length > 0 && (
-          <div className=''>
-            <div className='my-3'>
-              <h2 className='text-2xl font-semibold text-slate-600'>Recent offers</h2>
-              <Link className='text-sm text-blue-800 hover:underline' to={'/search?offer=true'}>Show more offers</Link>
-            </div>
-            <div className='flex flex-wrap gap-4'>
-              {offerListings.map((listing) => (
-                <ListingItem listing={listing} key={listing._id} />
-              ))}
-            </div>
-          </div>
-        )}
         {rentListings && rentListings.length > 0 && (
           <div className=''>
             <div className='my-3'>
-              <h2 className='text-2xl font-semibold text-slate-600'>Recent places for rent</h2>
-              <Link className='text-sm text-blue-800 hover:underline' to={'/search?type=rent'}>Show more places for rent</Link>
+              <h1 className='text-3xl font-semibold text-slate-600'>Nuevas ofertas de alquiler</h1>
+              <Link className='text-sm text-rose-800 hover:underline' 
+              to={'/search?type=rent'}>Llévame a ver alquileres</Link>
             </div>
             <div className='flex flex-wrap gap-4'>
               {rentListings.map((listing) => (
@@ -118,8 +91,9 @@ export default function Home() {
         {saleListings && saleListings.length > 0 && (
           <div className=''>
             <div className='my-3'>
-              <h2 className='text-2xl font-semibold text-slate-600'>Recent places for sale</h2>
-              <Link className='text-sm text-blue-800 hover:underline' to={'/search?type=sale'}>Show more places for sale</Link>
+              <h1 className='text-3xl font-semibold text-slate-600'>Nuevas ofertas de compra</h1>
+              <Link className='text-sm text-rose-800 hover:underline' 
+              to={'/search?type=sale'}>Quiero ver inmuebles para compra</Link>
             </div>
             <div className='flex flex-wrap gap-4'>
               {saleListings.map((listing) => (
@@ -128,6 +102,21 @@ export default function Home() {
             </div>
           </div>
         )}
+      </div>
+      <div className='flex flex-row justify-center'>
+      <h1 className='text-slate-500 font-bold text-xl lg:text-6xl pb-4'>
+        Parque de viviendas <span className='text-slate-700'>actualizado</span>
+        </h1>
+      </div>
+      <div className='flex flex-row justify-center gap-6 pb-8 px-3 max-w-6xl mx-auto'>
+        <div className='flex flex-col items-center '>
+          <h1 className='text-slate-700 font-bold text-xl lg:text-4xl'>Inmuebles en alquiler</h1>
+          <h2 className='text-rose-800 text-4xl lg:text-6xl font-bold'>{rentCount}</h2>
+        </div>
+        <div className='flex flex-col items-center '>
+          <h1 className='text-slate-700 font-bold text-xl lg:text-4xl'>Inmuebles en venta</h1>
+          <h2 className='text-rose-800 text-4xl lg:text-6xl font-bold'>{saleCount}</h2>
+        </div>
       </div>
     </div>
   );

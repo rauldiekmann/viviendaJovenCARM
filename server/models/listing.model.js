@@ -14,11 +14,7 @@ const listingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    regularPrice: {
-      type: Number,
-      required: true,
-    },
-    discountPrice: {
+    price: {
       type: Number,
       required: true,
     },
@@ -42,8 +38,8 @@ const listingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    offer: {
-      type: Boolean,
+    municipality: {
+      type: String,
       required: true,
     },
     imageUrls: {

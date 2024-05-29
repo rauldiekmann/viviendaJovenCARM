@@ -8,9 +8,11 @@ export default function Search() {
     type: 'all',
     parking: false,
     furnished: false,
-    offer: false,
     sort: 'created_at',
     order: 'desc',
+    minprice:"",
+    maxprice:"",
+    municipality:"all"
   });
 
   const [loading, setLoading] = useState(false);
@@ -24,27 +26,33 @@ export default function Search() {
     const typeFromUrl = urlParams.get('type');
     const parkingFromUrl = urlParams.get('parking');
     const furnishedFromUrl = urlParams.get('furnished');
-    const offerFromUrl = urlParams.get('offer');
     const sortFromUrl = urlParams.get('sort');
     const orderFromUrl = urlParams.get('order');
+    const minpriceFromUrl = urlParams.get('minprice');
+    const maxpriceFromUrl = urlParams.get('maxprice');
+    const municipalityFromUrl = urlParams.get('municipality');
 
     if (
       searchTermFromUrl ||
       typeFromUrl ||
       parkingFromUrl ||
       furnishedFromUrl ||
-      offerFromUrl ||
       sortFromUrl ||
-      orderFromUrl
+      orderFromUrl  ||
+      minpriceFromUrl ||
+      maxpriceFromUrl ||
+      municipalityFromUrl
     ) {
       setSidebardata({
         searchTerm: searchTermFromUrl || '',
         type: typeFromUrl || 'all',
         parking: parkingFromUrl === 'true' ? true : false,
         furnished: furnishedFromUrl === 'true' ? true : false,
-        offer: offerFromUrl === 'true' ? true : false,
         sort: sortFromUrl || 'created_at',
         order: orderFromUrl || 'desc',
+        minprice: minpriceFromUrl || '',
+        maxprice: maxpriceFromUrl || '',
+        municipality: municipalityFromUrl || 'all'
       });
     }
 
@@ -81,13 +89,19 @@ export default function Search() {
 
     if (
       e.target.id === 'parking' ||
-      e.target.id === 'furnished' ||
-      e.target.id === 'offer'
+      e.target.id === 'furnished'
     ) {
       setSidebardata({
         ...sidebardata,
         [e.target.id]:
           e.target.checked || e.target.checked === 'true' ? true : false,
+      });
+    }
+
+    if(e.target.id === 'municipality'){
+      setSidebardata({
+        ...sidebardata,
+        municipality: e.target.value,
       });
     }
 
@@ -98,6 +112,11 @@ export default function Search() {
 
       setSidebardata({ ...sidebardata, sort, order });
     }
+
+    if (e.target.id === 'minprice' || e.target.id === 'maxprice') {
+      setSidebardata({ ...sidebardata, [e.target.id]: e.target.value });
+    }
+    
   };
 
   const handleSubmit = (e) => {
@@ -107,9 +126,11 @@ export default function Search() {
     urlParams.set('type', sidebardata.type);
     urlParams.set('parking', sidebardata.parking);
     urlParams.set('furnished', sidebardata.furnished);
-    urlParams.set('offer', sidebardata.offer);
     urlParams.set('sort', sidebardata.sort);
     urlParams.set('order', sidebardata.order);
+    urlParams.set('minprice', sidebardata.minprice);
+    urlParams.set('maxprice', sidebardata.maxprice);
+    urlParams.set('municipality', sidebardata.municipality);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
@@ -133,19 +154,19 @@ export default function Search() {
         <form onSubmit={handleSubmit} className='flex flex-col gap-8'>
           <div className='flex items-center gap-2'>
             <label className='whitespace-nowrap font-semibold'>
-              Search Term:
+              Término de búsqueda:
             </label>
             <input
               type='text'
               id='searchTerm'
-              placeholder='Search...'
+              placeholder='Ej: piso, céntrica...'
               className='border rounded-lg p-3 w-full'
               value={sidebardata.searchTerm}
               onChange={handleChange}
             />
           </div>
           <div className='flex gap-2 flex-wrap items-center'>
-            <label className='font-semibold'>Type:</label>
+            <label className='font-semibold'>Tipo:</label>
             <div className='flex gap-2'>
               <input
                 type='checkbox'
@@ -154,7 +175,7 @@ export default function Search() {
                 onChange={handleChange}
                 checked={sidebardata.type === 'all'}
               />
-              <span>Rent & Sale</span>
+              <span>Venta y alquiler</span>
             </div>
             <div className='flex gap-2'>
               <input
@@ -164,7 +185,7 @@ export default function Search() {
                 onChange={handleChange}
                 checked={sidebardata.type === 'rent'}
               />
-              <span>Rent</span>
+              <span>Alquiler</span>
             </div>
             <div className='flex gap-2'>
               <input
@@ -174,21 +195,11 @@ export default function Search() {
                 onChange={handleChange}
                 checked={sidebardata.type === 'sale'}
               />
-              <span>Sale</span>
-            </div>
-            <div className='flex gap-2'>
-              <input
-                type='checkbox'
-                id='offer'
-                className='w-5'
-                onChange={handleChange}
-                checked={sidebardata.offer}
-              />
-              <span>Offer</span>
+              <span>Venta</span>
             </div>
           </div>
           <div className='flex gap-2 flex-wrap items-center'>
-            <label className='font-semibold'>Amenities:</label>
+            <label className='font-semibold'>Instalaciones:</label>
             <div className='flex gap-2'>
               <input
                 type='checkbox'
@@ -207,35 +218,115 @@ export default function Search() {
                 onChange={handleChange}
                 checked={sidebardata.furnished}
               />
-              <span>Furnished</span>
+              <span>Amueblada</span>
             </div>
           </div>
           <div className='flex items-center gap-2'>
-            <label className='font-semibold'>Sort:</label>
+    <label className='font-semibold'>Precio mínimo:</label>
+    <input
+      type='number'
+      id='minprice'
+      placeholder='Mínimo'
+      className='border rounded-lg p-3 w-full'
+      value={sidebardata.minprice}
+      onChange={handleChange}
+    />
+  </div>
+  
+  <div className='flex items-center gap-2'>
+    <label className='font-semibold'>Precio máximo:</label>
+    <input
+      type='number'
+      id='maxprice'
+      placeholder='Máximo'
+      className='border rounded-lg p-3 w-full'
+      value={sidebardata.maxprice}
+      onChange={handleChange}
+    />
+  </div>
+  <div className='flex items-center gap-2'>
+  <label for="municipality">Selecciona un municipio:</label>
+    <select id="municipality"       
+    className='border rounded-lg p-3 w-full'
+    value={sidebardata.municipality}
+    onChange={handleChange}
+>
+        <option value="all">Todos</option>
+        <option value="abanilla">Abanilla</option>
+        <option value="abaran">Abarán</option>
+        <option value="aguilas">Aguilas</option>
+        <option value="albudeite">Albudeite</option>
+        <option value="alcantarilla">Alcantarilla</option>
+        <option value="aledo">Aledo</option>
+        <option value="alguazas">Alguazas</option>
+        <option value="alhama_de_murcia">Alhama de Murcia</option>
+        <option value="archena">Archena</option>
+        <option value="beniel">Beniel</option>
+        <option value="blanca">Blanca</option>
+        <option value="bullas">Bullas</option>
+        <option value="calasparra">Calasparra</option>
+        <option value="campos_del_rio">Campos del Río</option>
+        <option value="caravaca_de_la_cruz">Caravaca de la Cruz</option>
+        <option value="cartagena">Cartagena</option>
+        <option value="cehegin">Cehegín</option>
+        <option value="ceuti">Ceutí</option>
+        <option value="cieza">Cieza</option>
+        <option value="fortuna">Fortuna</option>
+        <option value="fuente_alamo">Fuente Álamo</option>
+        <option value="jumilla">Jumilla</option>
+        <option value="la_union">La Unión</option>
+        <option value="las_torres_de_cotillas">Las Torres de Cotillas</option>
+        <option value="librilla">Librilla</option>
+        <option value="lorca">Lorca</option>
+        <option value="lorqui">Lorquí</option>
+        <option value="los_alcazares">Los Alcázares</option>
+        <option value="mazarron">Mazarrón</option>
+        <option value="molina_de_segura">Molina de Segura</option>
+        <option value="moratalla">Moratalla</option>
+        <option value="mula">Mula</option>
+        <option value="murcia">Murcia</option>
+        <option value="ojos">Ojós</option>
+        <option value="pliego">Pliego</option>
+        <option value="puerto_lumbreras">Puerto Lumbreras</option>
+        <option value="ricote">Ricote</option>
+        <option value="san_javier">San Javier</option>
+        <option value="san_pedro_del_pinatar">San Pedro del Pinatar</option>
+        <option value="santomera">Santomera</option>
+        <option value="torre_pacheco">Torre Pacheco</option>
+        <option value="totana">Totana</option>
+        <option value="ulea">Ulea</option>
+        <option value="villanueva_del_rio_segura">Villanueva del Río Segura</option>
+        <option value="yecla">Yecla</option>
+    </select>
+
+  </div>
+
+          <div className='flex items-center gap-2'>
+            <label className='font-semibold'>Ordenar:</label>
             <select
               onChange={handleChange}
               defaultValue={'created_at_desc'}
               id='sort_order'
               className='border rounded-lg p-3'
             >
-              <option value='regularPrice_desc'>Price high to low</option>
-              <option value='regularPrice_asc'>Price low to hight</option>
-              <option value='createdAt_desc'>Latest</option>
-              <option value='createdAt_asc'>Oldest</option>
+              <option value='price_desc'>Precio: más caro a más barato</option>
+              <option value='price_asc'>Precio: más barato a más caro</option>
+              <option value='createdAt_desc'>Más recientes</option>
+              <option value='createdAt_asc'>Más antiguos</option>
             </select>
           </div>
           <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95'>
-            Search
+            Buscar
           </button>
         </form>
       </div>
       <div className='flex-1'>
         <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>
-          Listing results:
+          Resultados de búsqueda:
         </h1>
         <div className='p-7 flex flex-wrap gap-4'>
           {!loading && listings.length === 0 && (
-            <p className='text-xl text-slate-700'>No listing found!</p>
+            <p className='text-xl text-black font-bold'>No se encontraron propiedades con tus criterios de búsqueda</p>
           )}
           {loading && (
             <p className='text-xl text-slate-700 text-center w-full'>

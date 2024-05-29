@@ -19,6 +19,7 @@ const about = () => {
   const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
 
+  console.log(currentUser);
   console.log(formData);
   //almacenamiento con firebase
   /*
@@ -191,10 +192,15 @@ const handleListingDelete = async (listingId) => {
        />
        <button className='bg-slate-700 text-white rounded-lg p-3 uppercase
         hover:opacity-95 disabled:opacity-80'>{loading ? "CARGANDO" : "ACTUALIZAR" }</button>
-        <Link  className = "bg-green-700 text-white p-3 rounded-lg uppercase text-center" 
-        to={"/create-listing"}>
-        Nuevo Inmueble
-        </Link>
+      
+      
+       {currentUser.type === 'seller' && (
+          <Link  className = "bg-green-700 text-white p-3 rounded-lg uppercase text-center" 
+          to={"/create-listing"}>
+          Nuevo Inmueble
+          </Link>
+       )}
+       
       </form>
       <div className='flex justify-between mt-5'>
         <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Borrar mi cuenta</span>
@@ -202,7 +208,11 @@ const handleListingDelete = async (listingId) => {
       </div>
       <p className='text-red-700 mt-5'>{error ? error :""}</p>
       <p className="text-green-700 mt-5">{updateSuccess ? "Usuario actualizado con éxito" : ""}</p>
-      <button onClick={handleShowListings} className='text-green-700 w-full'>Ver inmuebles</button>
+      
+      {currentUser.type === 'seller' && (      
+      <button onClick={handleShowListings} className='text-green-700 w-full'>
+        Ver inmuebles</button>
+      )}
       <p className='text-red-700 mt-5'>{showListingsError ? "Error al mostrar inmuebles" : ""}</p>
       {userListings && userListings.length > 0 && (
         <div className='flex flex-col gap-4'>

@@ -51,7 +51,7 @@ const Header = () => {
             </Link>
 
             <Link to="/about">
-              <li className='hidden sm:inline text-neutral-50 hover:underline'>Informacion</li>
+              <li className='hidden sm:inline text-neutral-50 hover:underline'>Información</li>
             </Link>
 
             <Link to="/profile">

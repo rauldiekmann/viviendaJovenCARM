@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {},
+    screens:{
+      'responsiveSellerPage': '430px'
+    }
   },
   plugins: [
     require('@tailwindcss/line-clamp'),

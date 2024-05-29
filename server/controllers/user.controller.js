@@ -52,24 +52,33 @@ export const deleteUser = async (req, res, next) => {
 
 
   export const getUserListings = async (req, res, next) => {
-    if (req.user.id === req.params.id) {
       try {
         const listings = await Listing.find({ userRef: req.params.id });
         res.status(200).json(listings);
       } catch (error) {
         next(error);
       }
-    } else {
-      return next(errorHandler(401, 'Solo puedes ver tus propios inmuebles'));
-    }
+    
   };
+
+  export const getUserListingsCount = async (req, res, next) => {
+      try {
+        const listingsCount = await Listing.countDocuments({ userRef: req.params.id });
+        res.status(200).json({ count: listingsCount });
+      } catch (error) {
+        next(error);
+      }
+    
+  };
+  
 
   export const getUser = async (req, res, next) => {
     try {
       const user = await User.findById(req.params.id);
     
       if (!user) return next(errorHandler(404, 'Usuario no encontrado'));
-    
+  
+      //No devolver la contraseña
       const { password: pass, ...rest } = user._doc;
     
       res.status(200).json(rest);
@@ -77,3 +86,5 @@ export const deleteUser = async (req, res, next) => {
       next(error);
     }
   };
+
+  
