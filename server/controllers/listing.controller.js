@@ -7,7 +7,7 @@ export const createListing = async (req, res,next) => {
     } catch (error) {
         next(error);   
     }
-}
+};
 
 export const deleteListing = async (req, res, next) => {
     const listing = await Listing.findById(req.params.id);
@@ -26,7 +26,7 @@ export const deleteListing = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-}
+};
 
 export const updateListing = async (req, res, next) => {
     const listing = await Listing.findById(req.params.id);
@@ -49,7 +49,7 @@ export const updateListing = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-}
+};
 
 export const getListing = async (req, res, next) => {
    try {
@@ -61,7 +61,7 @@ export const getListing = async (req, res, next) => {
    } catch (error) {
     next(error);
    } 
-}
+};
 
 export const countListings = async (req, res, next) => {
   try {
@@ -71,7 +71,7 @@ export const countListings = async (req, res, next) => {
   } catch (error) {
       next(error);
   }
-}
+};
 
 export const getListings = async (req, res, next) => {
     try {

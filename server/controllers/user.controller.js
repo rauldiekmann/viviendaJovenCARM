@@ -3,11 +3,9 @@ import User from '../models/user.model.js';
 import Listing from '../models/listing.model.js';
 import {errorHandler} from '../utils/error.js';
 
-
 export const test = (req, res) => {
     res.json({message: 'Route works'});
 };
-
 
 export const updateUser = async (req, res, next) => {
     if (req.user.id !== req.params.id)
@@ -50,7 +48,6 @@ export const deleteUser = async (req, res, next) => {
     }
   };
 
-
   export const getUserListings = async (req, res, next) => {
       try {
         const listings = await Listing.find({ userRef: req.params.id });
@@ -58,7 +55,6 @@ export const deleteUser = async (req, res, next) => {
       } catch (error) {
         next(error);
       }
-    
   };
 
   export const getUserListingsCount = async (req, res, next) => {
@@ -70,7 +66,6 @@ export const deleteUser = async (req, res, next) => {
       }
     
   };
-  
 
   export const getUser = async (req, res, next) => {
     try {
@@ -86,5 +81,3 @@ export const deleteUser = async (req, res, next) => {
       next(error);
     }
   };
-
-  

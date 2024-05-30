@@ -5,10 +5,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
-    screens:{
-      'responsiveSellerPage': '430px'
-    }
+    extend: {}
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
