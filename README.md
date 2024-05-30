@@ -9,7 +9,7 @@ Usually, the government portals have a poor design and are flooded with irreleva
 to find affordable properties, and know right away if you are eligible for a subsidy.
 
 ## Usage
-To use ViviendaJovenCarm, simply browse the listings and search for properties based on your preferences. You can filter by location, price range, amenities, and more. Once you find a property you're interested in, you can view more details, schedule a viewing, or contact the seller directly through the platform.
+To use ViviendaJovenCarm, simply browse the listings and search for properties based on your preferences. You can filter by location, price range, amenities, and more. Once you find a property you're interested in, you can view more details, or contact the seller directly through the platform.
 
 
 ## Quick Start
