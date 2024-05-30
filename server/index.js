@@ -5,12 +5,16 @@ import userRouter from './routes/user.routes.js';
 import authRouter from './routes/auth.routes.js';
 import listingRouter from './routes/listing.routes.js';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 
 dotenv.config();
 
 mongoose.connect(process.env.MONGO).then(() => {
     console.log('Connected to MongoDB');
-    }).catch((err) => { console.log(err) })
+    }).catch((err) => { console.log(err) });
+
+    //Dynamic pathname
+    const __dirname = path.resolve();
 
 const app = express();
 
@@ -20,6 +24,11 @@ app.use(cookieParser());
 app.use('/server/user', userRouter);
 app.use('/server/auth', authRouter);
 app.use('/server/listing', listingRouter);
+
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => 
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html')));
 
 //Error middleware
 app.use((err, req, res, next) => {
