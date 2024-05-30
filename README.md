@@ -20,5 +20,3 @@ To get started with ViviendaJovenCarm, follow these steps:
    cd vivienda-joven-carm
    npm install
    npm start 
-
-
