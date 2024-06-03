@@ -101,9 +101,9 @@ export default function Listing() {
 
   return (
     <main>
-      {loading && <p className='text-center my-7 text-2xl'>Cargando...</p>}
+      {loading && <p className='text-2xl text-center my-7'>Cargando...</p>}
       {error && (
-        <p className='text-center my-7 text-2xl'>Algo fue mal</p>
+        <p className='text-2xl text-center my-7'>Algo fue mal</p>
       )}
       {listing && !loading && !error && (
         <div>
@@ -120,20 +120,22 @@ export default function Listing() {
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className='flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4'>
+          <div className='flex flex-col max-w-4xl gap-4 p-3 mx-auto my-7'>
             <p className='text-2xl font-semibold'>
               {listing.name} - {' '}
+              <span className='font-bold text-green-900'>
               {listing.price.toLocaleString('en-US')}
                 € 
               {listing.type === 'rent' && ' /mes'}
+              </span>
             </p>
             {seller && 
                     <Link to={`/seller/${seller._id}`}>
                       <div className='flex flex-col mt-2'>
-                        <h1 className='text-l  w-fit'>Vendido por:</h1>
+                        <h1 className='text-l w-fit'>Vendido por:</h1>
                         <div className='flex flex-row mt-2'>
-                          <img src={seller.avatar} className='max-h-[50px]' />
-                          <div className='flex flex-col ml-5 justify-evenly items-center'>
+                        <img src={seller.avatar} className='object-cover w-16 h-16 rounded-full' />
+                          <div className='flex flex-col items-center ml-5 justify-evenly'>
                               <h1 className='text-xl font-bold w-fit'>{seller.username}</h1>
                           </div>
                           </div>
@@ -141,11 +143,11 @@ export default function Listing() {
                         </Link>
             }
             
-            <p className='flex items-center mt-6 gap-2 text-black text-xl font-bold'>
+            <p className='flex items-center gap-2 mt-6 text-xl font-bold text-black'>
               <FaCity className='text-green-700' />
               {formatMunicipality(listing.municipality)}
             </p>
-            <p className='flex items-center mt-2 gap-2 text-slate-600  text-sm'>
+            <p className='flex items-center gap-2 mt-2 text-sm text-slate-600'>
               <FaMapMarkerAlt className='text-green-700' />
               {listing.address}
             </p>
@@ -158,7 +160,7 @@ export default function Listing() {
               <span className='font-semibold text-black'>Descripción - </span>
               {listing.description}
             </p>
-            <ul className='text-green-900 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6'>
+            <ul className='flex flex-wrap items-center gap-4 text-sm font-semibold text-green-900 sm:gap-6'>
               <li className='flex items-center gap-1 whitespace-nowrap '>
                 <FaBed className='text-lg' />
                 {listing.bedrooms > 1
@@ -180,18 +182,18 @@ export default function Listing() {
                 {listing.furnished ? 'Amueblado' : 'Sin amueblar'}
               </li>
             </ul>
-            <p className='text-rose-800 font-bold text-xl mt-2'>
+            <p className='mt-2 text-xl font-bold text-rose-800'>
               Calcula si calificas para la ayuda de la CARM
             </p>
-            <a href="https://www.irpf.eu/excel/finanzas.zip" className='text-blue-500'>Descarga aquí el Excel para 
+            <a href="https://download1526.mediafire.com/dpkhxecnb0zgygd8AiB_IDoJck5IS2kRLSx_CmXmVYJUKaSx1v0sDzOLuL6rBVDh65pyI66SOVBqQAkKrB_cVLU5lxg-Hb7QQPo4EXUZzJtOI1h-2VF-NabNo5AqIVEoYhU_5zWpKe0z1Akrqyc7NWQuKA_KIPxeh9urWRFrnsT96cg/p9glostm3krenfe/IPREM.xls" className='text-blue-500'>Descarga aquí el Excel para 
             calcular tus ingresos anuales.</a>
-    <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-4 pt-2'>
-    <div className='flex flex-col gap-4 flex-1'>
+    <form onSubmit={handleSubmit} className='flex flex-col gap-4 pt-2 sm:flex-row'>
+    <div className='flex flex-col flex-1 gap-4'>
   
         <input
           type="text"
           placeholder='Edad'  
-          className='border p-3 rounded-lg max-w-xs'
+          className='max-w-xs p-3 border rounded-lg'
           maxLength='2'
           minLength='2'
           required
@@ -200,11 +202,11 @@ export default function Listing() {
         <input
           type="text"
           placeholder='Suma rentas anuales'
-          className='border p-3 rounded-lg max-w-xs'
+          className='max-w-xs p-3 border rounded-lg'
           onChange={(e) => setSalary(e.target.value)}
         />
         
-        <ul className='list-disc ml-5'>
+        <ul className='ml-5 list-disc'>
           <li>Tengo residencia legal en España</li>
           <li>No tengo parentesco con el arrendador / vendedor</li>
           <li>No tengo otra vivienda en propiedad</li>
@@ -220,28 +222,28 @@ export default function Listing() {
         />
         <p className='ml-2 font-bold'>Confirmo que cumplo todos los requisitos mencionados arriba</p>
         </div>
-        {isEligible &&  <p className='text-green-900 font-bold text-xl mt-2'>
+        {isEligible &&  <p className='mt-2 text-xl font-bold text-green-900'>
       Enhorabuena, cumples los requisitos para recibir la ayuda de la CARM
       </p>}
-      {isEligible === false && <p className='text-red-900 font-bold text-xl mt-2'>
+      {isEligible === false && <p className='mt-2 text-xl font-bold text-red-900'>
         Lo sentimos, no cumples los requisitos para recibir la ayuda de la CARM:
         </p>}
-        {isEligible === false && meetsConditions===false && <p className='text-red-900 font-bold text-l mt-2'>
+        {isEligible === false && meetsConditions===false && <p className='mt-2 font-bold text-red-900 text-l'>
         No cumples alguno de los requisitos de residencia, parentesco o situación de vivienda
         </p>}
-        {isEligible === false && listing.type==="rent" && salary > 25200 && <p className='text-red-900 font-bold text-l mt-2'>
+        {isEligible === false && listing.type==="rent" && salary > 25200 && <p className='mt-2 font-bold text-red-900 text-l'>
         Tus ingresos anuales superan el limite de 3 veces el IPREM
         </p>}
-        {isEligible === false && listing.type==="sale" && salary > 45360 && <p className='text-red-900 font-bold text-l mt-2'>
+        {isEligible === false && listing.type==="sale" && salary > 45360 && <p className='mt-2 font-bold text-red-900 text-l'>
         Tus ingresos anuales superan el limite de 5,4 veces el IPREM
         </p>}
-        {isEligible === false && age >35 && <p className='text-red-900 font-bold text-l mt-2'>
+        {isEligible === false && age >35 && <p className='mt-2 font-bold text-red-900 text-l'>
         Tu edad supera los 35 años
         </p>}
 
       
         
-      <button type="submit" className='max-w-xs bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 '>ENVIAR</button>
+      <button type="submit" className='max-w-xs p-3 text-white uppercase rounded-lg bg-slate-700 hover:opacity-95 '>ENVIAR</button>
     </div>
     
       
@@ -262,7 +264,7 @@ export default function Listing() {
             </div>
             {currentUser &&currentUser.type ==="buyer" && listing.userRef !== currentUser._id && !contact && (
             <button onClick={()=>setContact(true)} 
-            className='bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3'>
+            className='p-3 text-white uppercase rounded-lg bg-slate-700 hover:opacity-95'>
               Contactar propietario</button>
             )}
             {contact && <Contact listing={listing}/>}

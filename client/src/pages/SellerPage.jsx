@@ -4,6 +4,7 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { MdEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { Link } from 'react-router-dom';
@@ -22,6 +23,8 @@ export default function SellerPage() {
     const [listingsLoading, setListingsLoading] = useState(false);
 
     const params = useParams();
+    const { currentUser } = useSelector((state) => state.user);
+
 
     useEffect(() => {
         const fetchSeller = async () => {
@@ -112,20 +115,38 @@ export default function SellerPage() {
                                         <p className='text-sm sm:text-md md:text-xl lg:text-3xl'>
                                             Contacta a <span className='font-semibold'>{seller.username}</span>{' '}:
                                         </p>
-                                        <div className='flex flex-row gap-2'>
-                                            <MdEmail className='mt-1 text-sm sm:text-md md:text-xl lg:text-3xl text-rose-800' />
-                                            <p className='text-sm font-bold  sm:text-md md:text-xl lg:text-4xl text-rose-800'>
-                                                {seller.email}
-                                            </p>
-                                        </div>
-                                        {seller.phone && (
-                                            <div className='flex flex-row gap-2'>
-                                                <FaPhoneAlt className='mt-1 text-4xl text-rose-800' />
-                                                <p className='text-4xl font-bold text-rose-800'>
-                                                    {seller.phone}
-                                                </p>
-                                            </div>
-                                        )}
+                                        {currentUser ? (
+    <>
+        {currentUser.type === "buyer" && seller._id !== currentUser._id && contact ? (
+            <>
+                <div className='flex flex-row gap-2'>
+                    <MdEmail className='mt-1 text-sm sm:text-md md:text-xl lg:text-3xl text-rose-800' />
+                    <p className='text-sm font-bold sm:text-md md:text-xl lg:text-4xl text-rose-800'>
+                        {seller.email}
+                    </p>
+                </div>
+                {seller.phone && (
+                    <div className='flex flex-row gap-2'>
+                        <FaPhoneAlt className='mt-1 text-4xl text-rose-800' />
+                        <p className='text-4xl font-bold text-rose-800'>
+                            {seller.phone}
+                        </p>
+                    </div>
+                )}
+            </>
+        ) : (
+            currentUser.type === "seller" && (
+                <p className='font-bold text-rose-800'>Solo los compradores pueden contactar a los vendedores</p>
+            )
+        )}
+    </>
+) : (
+    <p className='font-bold text-rose-800'>Regístrate para ver la información del vendedor</p>
+)}
+
+
+
+                                        
                                     </div>
                                 </div>
                             )}

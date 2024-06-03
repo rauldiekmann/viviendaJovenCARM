@@ -36,22 +36,21 @@ const Header = () => {
             </h1>
           </Link>
           <form onSubmit = {handleSubmit}
-          className='flex items-center p-3 rounded-lg bg-slate-100'>
+          className='flex items-center hidden p-3 rounded-lg bg-slate-100 sm:inline'>
             <input type="text" placeholder='Buscar propiedad...' 
             className='w-24 bg-transparent focus:outline-none sm:w-64'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <FaSearch className='text-slate-600' />
           </form>
           <ul className='flex gap-4'>
 
             <Link to="/">
-              <li className=' sm:inline text-neutral-50 hover:underline'>Inicio</li>
+              <li className='hidden sm:inline text-neutral-50 hover:underline'>Inicio</li>
             </Link>
 
             <Link to="/about">
-              <li className=' sm:inline text-neutral-50 hover:underline'>Información</li>
+              <li className='hidden sm:inline text-neutral-50 hover:underline'>Información</li>
             </Link>
 
             <Link to="/profile">
